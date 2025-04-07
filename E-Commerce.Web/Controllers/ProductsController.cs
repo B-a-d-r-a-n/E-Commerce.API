@@ -7,21 +7,21 @@ namespace E_Commerce.Web.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         public ActionResult<Product> Get(int id) // baseUrl/api/products/10
         {
-            return new Product() { id = id, Name = "btates" };
+            return new Product() { Id = id, Name = "btates" };
         }
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetAll() // baseUrl/api/products
         {
-            return new List<Product>([new Product() { id= 10 , Name = "btates"}]); 
+            return new List<Product>([new Product() { Id= 10 , Name = "btates"}]); 
         }
         [HttpDelete] // not specified in attribute = query unless special command given in method [from]
         public ActionResult<Product> Delete(int id) // baseUrl/api/products?id=10
         {
 
-            return new Product() { id = id, Name = "Name" };
+            return new Product() { Id = id, Name = "Name" };
 
         }
         [HttpPost]
@@ -42,7 +42,7 @@ namespace E_Commerce.Web.Controllers
     }
    public class Product
         {
-            public int id { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
 
         }

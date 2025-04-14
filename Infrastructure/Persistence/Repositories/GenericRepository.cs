@@ -8,7 +8,8 @@ using Persistence.Data;
 
 namespace Persistence.Repositories
 {
-    public class GenericRepository<TEntity, TKey>(StoreDbContext context) : IGenericRepository<TEntity, TKey>
+    public class GenericRepository<TEntity, TKey>(StoreDbContext context) 
+        : IGenericRepository<TEntity, TKey>
         where TEntity : BaseEntity<TKey>
     {
         public void Add(TEntity entity) => context.Set<TEntity>().Add(entity);

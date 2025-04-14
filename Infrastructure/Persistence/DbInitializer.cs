@@ -24,7 +24,7 @@ namespace Persistence
                 if (!context.ProductBrands.Any())
                 {
                     // Read from the file
-                    var BrandsData = await File.ReadAllTextAsync(path: @"..\..\Persistence\Data\Seeding\brands.json");
+                    var BrandsData = await File.ReadAllTextAsync(path: @"..\Infrastructure\Persistence\Data\Seeding\brands.json");
 
                     // Deserialize => Convert from String to C# Object
                     var brands = JsonSerializer.Deserialize<List<ProductBrand>>(json: BrandsData);
@@ -36,26 +36,23 @@ namespace Persistence
 
                     await context.SaveChangesAsync();
                 }
-                if (!context.ProductBrands.Any())
+                if (!context.ProductTypes.Any())
                 {
                     // Read from the file
-                    var TypesData = await File.ReadAllTextAsync(path: @"..\..\Persistence\Data\Seeding\brands.json");
-
+                    var typesData = await File.ReadAllTextAsync(@"..\Infrastructure\Persistence\Data\Seeding\types.json");
                     // Deserialize => Convert from String to C# Object
-                    var types = JsonSerializer.Deserialize<List<ProductType>>(json: TypesData);
+                    var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
 
                     if (types != null && types.Any())
                     {
-                        context.ProductTypes.AddRange(entities: types);
+                        context.ProductTypes.AddRange(types);
                     }
-
                     await context.SaveChangesAsync();
                 }
                 if (!context.Products.Any())
                 {
                     // Read from the file
-                    var productsData = await File.ReadAllTextAsync(path: @"..\..\Persistence\Data\Seeding\products.json");
-
+                    var productsData = await File.ReadAllTextAsync(path: @"..\Infrastructure\Persistence\Data\Seeding\products.json");
                     // Deserialize => Convert from String to C# Object
                     var products = JsonSerializer.Deserialize<List<Product>>(json: productsData);
 
@@ -63,7 +60,6 @@ namespace Persistence
                     {
                         context.Products.AddRange(entities: products);
                     }
-
                     await context.SaveChangesAsync();
                 }
             }

@@ -4,6 +4,8 @@ using Domain.Contracts;
 using Persistence;
 using Persistence.Data;
 using Persistence.Repositories;
+using Services;
+using ServicesAbstraction;
 
 namespace E_Commerce.Web
 {
@@ -15,7 +17,8 @@ namespace E_Commerce.Web
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddDbContext<StoreDbContext>(options=>
             {
@@ -23,10 +26,12 @@ namespace E_Commerce.Web
                 options.UseSqlServer(ConnectionString);
             });
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IServiceManager,ServiceManager>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             var app = builder.Build();
             await InitializeDbAsync(app);
             // Configure the HTTP request pipeline.

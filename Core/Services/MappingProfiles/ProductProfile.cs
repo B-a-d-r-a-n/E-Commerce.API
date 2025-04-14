@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.Extensions.Configuration;
+
 namespace Services.MappingProfiles
 {
     internal class ProductProfile :Profile
@@ -14,9 +16,26 @@ namespace Services.MappingProfiles
                    .ForMember(d => d.TypeName,
                 options =>
                 options
-                .MapFrom(s => s.ProductType.Name)); ;
+                .MapFrom(s => s.ProductType.Name))
+
+                   .ForMember(d=> d.PictureUrl,options => options
+                   .MapFrom<PictureUrlResolver>());
+
             CreateMap<ProductBrand, BrandResponse>();
             CreateMap<ProductType, TypeResponse>();
+        }
+    }
+
+    internal class PictureUrlResolver(IConfiguration configuration)
+        : IValueResolver<Product, ProductResponse, string>
+    {
+        public string Resolve(Product source, ProductResponse destination, string destMember, ResolutionContext context)
+        {
+            if (!string.IsNullOrEmpty(source.PictureUrl))
+            {
+                return $"{configuration["BaseUrl"]}{source.PictureUrl}";
+            }
+            return "";
         }
     }
 }

@@ -11,9 +11,9 @@ namespace Presentation.Controllers
         : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts() // get baseurl/api/products
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts(int? brandId,int? typeId) // get baseurl/api/products
         {
-            var products = await serviceManager.ProductService.GetAllProductsAsync();
+            var products = await serviceManager.ProductService.GetAllProductsAsync(brandId,typeId);
             return Ok(products);
         }
         [HttpGet("{id}")]

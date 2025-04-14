@@ -1,5 +1,6 @@
 ﻿
 using System.Linq.Expressions;
+using Domain.Models;
 
 namespace Services.Specifications
 {
@@ -14,8 +15,12 @@ namespace Services.Specifications
             AddInclude(p=> p.ProductType);
         }
         // use the constructor to create query to get all product
-        public ProductWithBrandAndTypeSpecifications()
-            :base(null)
+        // use for sorting and filtration
+        public ProductWithBrandAndTypeSpecifications(int? brandId,int? typeId)
+        :base(product =>
+            (!brandId.HasValue || product.BrandId == brandId.Value) &&
+            (!typeId.HasValue || product.TypeId == typeId.Value)
+            )
         {
             AddInclude(p => p.ProductBrand);
             AddInclude(p => p.ProductType);

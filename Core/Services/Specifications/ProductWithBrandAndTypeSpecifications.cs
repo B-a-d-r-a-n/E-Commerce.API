@@ -16,7 +16,7 @@ namespace Services.Specifications
         }
         // use the constructor to create query to get all product
         // use for sorting and filtration
-        public ProductWithBrandAndTypeSpecifications(int? brandId,int? typeId)
+        public ProductWithBrandAndTypeSpecifications(int? brandId,int? typeId, ProductSortingOptions options)
         :base(product =>
             (!brandId.HasValue || product.BrandId == brandId.Value) &&
             (!typeId.HasValue || product.TypeId == typeId.Value)
@@ -24,6 +24,25 @@ namespace Services.Specifications
         {
             AddInclude(p => p.ProductBrand);
             AddInclude(p => p.ProductType);
+
+            switch(options)
+            {
+                case ProductSortingOptions.NameAsc:
+                    AddOrderBy(p => p.Name);
+                    break; 
+                case ProductSortingOptions.NameDesc:
+                    AddOrderByDescending(p => p.Name);
+                    break;  
+                case ProductSortingOptions.PriceAsc:
+                    AddOrderBy(p => p.Price);
+                    break;
+                case ProductSortingOptions.PriceDesc:
+                    AddOrderByDescending(p => p.Price);
+                    break;
+                default:
+                    break;
+
+            }
         }
     }
 }

@@ -18,7 +18,8 @@ namespace Services.MappingProfiles
                 options
                 .MapFrom(s => s.ProductType.Name))
 
-                   .ForMember(d=> d.PictureUrl,options => options
+                   .ForMember(d=> d.PictureUrl,options => 
+                   options
                    .MapFrom<PictureUrlResolver>());
 
             CreateMap<ProductBrand, BrandResponse>();

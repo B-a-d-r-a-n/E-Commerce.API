@@ -18,7 +18,7 @@ namespace E_Commerce.Web
             // Add services to the container.
 
             builder.Services.AddControllers()
-                .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+               /* .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)*/;
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddDbContext<StoreDbContext>(options=>
             {
@@ -55,7 +55,7 @@ namespace E_Commerce.Web
             // Object from type that Implements IDbInitializer
             // Create Scope to Resolve the Scoped Service
 
-            using var scope = app.Services.CreateScope(); // UnManaged
+            using var scope = app.Services.CreateScope(); // UnManaged *using -> auto dispose*
                                                           // Resolve from the Scope
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
             await dbInitializer.InitializeAsync();

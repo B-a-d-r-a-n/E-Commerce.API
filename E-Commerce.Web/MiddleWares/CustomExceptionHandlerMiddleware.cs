@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Domain.Exceptions;
 using Shared.DataTransferObjects.ErrorModels;
 
 namespace E_Commerce.Web.MiddleWares
@@ -25,7 +26,7 @@ namespace E_Commerce.Web.MiddleWares
                 _logger.LogError(ex, "something went wrong");
                 //response object
                 //set status code  for response
-                httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                //httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 //set content type for response 
                 httpContext.Response.ContentType = "application/json";
                 //response object
@@ -35,8 +36,13 @@ namespace E_Commerce.Web.MiddleWares
                 =(int)HttpStatusCode.InternalServerError
                 ,ErrorMessage= ex.Message
                 };
+                response.StatusCode = ex switch
+                {
+                    NotFoundException => (int)HttpStatusCode.NotFound,
+                     _ => (int)HttpStatusCode.InternalServerError,
+                };
                 //return response as json
-               
+               httpContext.Response.StatusCode= response.StatusCode;
               await httpContext.Response.WriteAsJsonAsync(response);
             }
             

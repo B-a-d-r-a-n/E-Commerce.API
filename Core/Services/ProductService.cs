@@ -12,6 +12,7 @@ namespace Services
         public async Task<PaginatedResponse<ProductResponse>> GetAllProductsAsync(
             ProductQueryParameters queryParameters)
         {
+            throw new Exception("test");
             var specifications = new ProductWithBrandAndTypeSpecifications(queryParameters);
             var product = await unitOfWork.GetRepository<Product, int>().GetAllAsync(specifications);
             var data= mapper.Map<IEnumerable<Product>,IEnumerable<ProductResponse>>(product);

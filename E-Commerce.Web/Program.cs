@@ -1,6 +1,7 @@
 
 global using Microsoft.EntityFrameworkCore;
 using Domain.Contracts;
+using E_Commerce.Web.MiddleWares;
 using Persistence;
 using Persistence.Data;
 using Persistence.Repositories;
@@ -34,6 +35,7 @@ namespace E_Commerce.Web
 
             var app = builder.Build();
             await InitializeDbAsync(app);
+            app.UseMiddleware<CustomExceptionHandlerMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

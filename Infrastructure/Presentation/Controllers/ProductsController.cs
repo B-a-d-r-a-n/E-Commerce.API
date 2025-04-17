@@ -12,7 +12,7 @@ namespace Presentation.Controllers
         : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts(
+        public async Task<ActionResult<PaginatedResponse<ProductResponse>>> GetAllProducts(
             [FromQuery]ProductQueryParameters queryParameters) // get baseurl/api/products
         {
             var products = await serviceManager.ProductService.GetAllProductsAsync(queryParameters);

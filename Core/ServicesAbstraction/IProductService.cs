@@ -7,7 +7,7 @@ namespace ServicesAbstraction
     public interface IProductService
     {
         // get all
-        Task<IEnumerable<ProductResponse>> GetAllProductsAsync(ProductQueryParameters queryParameters);
+        Task<PaginatedResponse<ProductResponse>> GetAllProductsAsync(ProductQueryParameters queryParameters);
         // get one
         Task<ProductResponse> GetProductAsync(int id);
         // get all brands

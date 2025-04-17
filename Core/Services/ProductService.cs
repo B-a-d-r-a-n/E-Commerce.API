@@ -15,8 +15,10 @@ namespace Services
             var specifications = new ProductWithBrandAndTypeSpecifications(queryParameters);
             var product = await unitOfWork.GetRepository<Product, int>().GetAllAsync(specifications);
             var data= mapper.Map<IEnumerable<Product>,IEnumerable<ProductResponse>>(product);
-            var pageCount = data.Count(); // عدد الموجود في الصفحة دي فقط
-            return new(queryParameters.PageIndex, pageCount,0,data);
+            var pageCount = data.Count(); // عدد الموجود في الصفحة دي فقط كل مرة بتبعت ريكويست فانت بتاخد الي حددت عدده في الكويري لأن اتعمل سكيب و تيك فانت بتعد الي اتعمله تيك هنا الي مش شرط يكون الرقم الي محدده لو مفيش الي يكمله
+            var totalCount =await unitOfWork.GetRepository<Product, int>()
+                .CountAsync(new ProductCountSpecifications(queryParameters));
+            return new(queryParameters.PageIndex, pageCount,totalCount,data);
         }
 
 

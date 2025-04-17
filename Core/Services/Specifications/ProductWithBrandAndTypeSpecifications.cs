@@ -1,6 +1,7 @@
 ﻿
 using System.Linq.Expressions;
 using Domain.Models;
+using Shared.DataTransferObjects;
 
 namespace Services.Specifications
 {
@@ -16,23 +17,35 @@ namespace Services.Specifications
         }
         // use the constructor to create query to get all product
         // use for sorting and filtration
-        public ProductWithBrandAndTypeSpecifications(int? brandId,int? typeId, ProductSortingOptions options)
-        :base(product =>
-            (!brandId.HasValue || product.BrandId == brandId.Value) &&
-            (!typeId.HasValue || product.TypeId == typeId.Value)
+        public ProductWithBrandAndTypeSpecifications(ProductQueryParameters parameters)
+        : base(CreateCriteria(parameters)
             )
         {
             AddInclude(p => p.ProductBrand);
             AddInclude(p => p.ProductType);
+            ApplySorting(parameters.Options);
+        }
 
-            switch(options)
+        private static Expression<Func<Product, bool>> CreateCriteria(ProductQueryParameters parameters)
+        {
+            return product =>
+
+               (!parameters.BrandId.HasValue || product.BrandId == parameters.BrandId.Value) &&
+               (!parameters.TypeId.HasValue || product.TypeId == parameters.TypeId.Value)&&
+               (string.IsNullOrWhiteSpace(parameters.Search)
+               ||product.Name.ToLower().Contains(parameters.Search.ToLower()));
+        }
+
+        private void ApplySorting(ProductSortingOptions options)
+        {
+            switch (options)
             {
                 case ProductSortingOptions.NameAsc:
                     AddOrderBy(p => p.Name);
-                    break; 
+                    break;
                 case ProductSortingOptions.NameDesc:
                     AddOrderByDescending(p => p.Name);
-                    break;  
+                    break;
                 case ProductSortingOptions.PriceAsc:
                     AddOrderBy(p => p.Price);
                     break;

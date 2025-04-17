@@ -5,7 +5,8 @@ namespace Persistence.Repositories
 {
     internal static class SpecificationsEvaluator
     {
-        public static IQueryable<T> CreateQuery<T>(IQueryable<T> inputQuery,ISpecifications<T> specifications)
+        public static IQueryable<T> CreateQuery<T>
+            (IQueryable<T> inputQuery,ISpecifications<T> specifications)
             where T:class
         {
             var query = inputQuery;
@@ -24,6 +25,12 @@ namespace Persistence.Repositories
             }  else if(specifications.OrderByDescending is not null)
             {
                 query = query.OrderByDescending(specifications.OrderByDescending);
+            }
+            if (specifications.IsPaginated)
+            {
+                query = query
+                    .Skip(specifications.Skip)
+                    .Take(specifications.Take);
             }
             return query;
         }

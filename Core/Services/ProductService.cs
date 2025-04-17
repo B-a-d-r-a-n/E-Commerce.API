@@ -1,5 +1,6 @@
 ﻿
 
+using Domain.Exceptions;
 using Services.Specifications;
 using Shared.DataTransferObjects;
 
@@ -12,7 +13,6 @@ namespace Services
         public async Task<PaginatedResponse<ProductResponse>> GetAllProductsAsync(
             ProductQueryParameters queryParameters)
         {
-            throw new Exception("test");
             var specifications = new ProductWithBrandAndTypeSpecifications(queryParameters);
             var product = await unitOfWork.GetRepository<Product, int>().GetAllAsync(specifications);
             var data= mapper.Map<IEnumerable<Product>,IEnumerable<ProductResponse>>(product);
@@ -26,7 +26,8 @@ namespace Services
         public async Task<ProductResponse> GetProductAsync(int id)
         {
             var specifications = new ProductWithBrandAndTypeSpecifications(id);
-            var product = await unitOfWork.GetRepository<Product, int>().GetAsync(specifications);
+            var product = await unitOfWork.GetRepository<Product, int>().GetAsync(specifications)??
+            throw new ProductNotFoundException(id);
             return mapper.Map<Product,ProductResponse>(product);
         }
         public async Task<IEnumerable<BrandResponse>> GetBrandsAsync()

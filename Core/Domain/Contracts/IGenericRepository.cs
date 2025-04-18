@@ -8,6 +8,7 @@ namespace Domain.Contracts
     {
         Task<TEntity?> GetAsync(TKey id);
         Task<TEntity?> GetAsync(ISpecifications<TEntity> specifications);
+        Task<int> CountAsync(ISpecifications<TEntity> specifications);
         Task<IEnumerable<TEntity>> GetAllAsync(bool trackChanges = false);
         Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity> specifications);
         void Delete(TEntity entity);

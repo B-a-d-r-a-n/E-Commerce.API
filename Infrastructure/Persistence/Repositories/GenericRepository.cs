@@ -30,5 +30,12 @@ namespace Persistence.Repositories
             => await SpecificationsEvaluator.CreateQuery(context.Set<TEntity>(), specifications)
                  .ToListAsync();
 
+        public async Task<int> CountAsync(ISpecifications<TEntity> specifications)
+        {
+            return
+                await SpecificationsEvaluator
+                .CreateQuery(context.Set<TEntity>(), specifications)
+                .CountAsync();
+        }
     }
 }

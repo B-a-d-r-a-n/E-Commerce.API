@@ -1,11 +1,14 @@
-
 global using Microsoft.EntityFrameworkCore;
 using Domain.Contracts;
+using E_Commerce.Web.Factories;
+using E_Commerce.Web.MiddleWares;
+using Microsoft.AspNetCore.Mvc;
 using Persistence;
 using Persistence.Data;
 using Persistence.Repositories;
 using Services;
 using ServicesAbstraction;
+using Shared.DataTransferObjects.ErrorModels;
 
 namespace E_Commerce.Web
 {
@@ -17,23 +20,21 @@ namespace E_Commerce.Web
 
             // Add services to the container.
 
-            builder.Services.AddControllers()
-                .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+              
+            builder.Services.AddControllers(); /* .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)*/
+            builder.Services.AddApplicationServices();
+            builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddWebApplicationServices();
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddDbContext<StoreDbContext>(options=>
-            {
-                var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-                options.UseSqlServer(ConnectionString);
-            });
-            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-            builder.Services.AddScoped<IServiceManager,ServiceManager>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+
 
             var app = builder.Build();
-            await InitializeDbAsync(app);
+           
+            await app.InitializeDataBaseAsync(); //await InitializeDbAsync(app);
+            app.UseCustomExceptionMiddleware();      //app.UseMiddleware<CustomExceptionHandlerMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -50,15 +51,6 @@ namespace E_Commerce.Web
 
             app.Run();
         }
-        public static async Task InitializeDbAsync(WebApplication app)
-        {
-            // Object from type that Implements IDbInitializer
-            // Create Scope to Resolve the Scoped Service
-
-            using var scope = app.Services.CreateScope(); // UnManaged
-                                                          // Resolve from the Scope
-            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-            await dbInitializer.InitializeAsync();
-        }
+        
     }
 }

@@ -9,6 +9,9 @@ namespace Domain.Contracts
         List<Expression<Func<T, object>>> IncludeExpressions { get; }
         Expression<Func<T,object>> OrderBy { get; }
         Expression<Func<T,object>> OrderByDescending { get; }
+        int Skip {  get; }
+        int Take {  get; }
+        bool IsPaginated {  get; }
     }
 }
 // where => Expression<Func<T,bool>> Criteria

@@ -73,4 +73,14 @@ namespace E_Commerce.Web.MiddleWares
             }
         }
     }
+    public static class CustomExceptionHandlerMiddlewareExtensions
+    {
+        public static IApplicationBuilder UseCustomExceptionMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<CustomExceptionHandlerMiddleware>();
+            return app;
+        }
+    }
+
 }
+

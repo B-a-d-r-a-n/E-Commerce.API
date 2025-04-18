@@ -1,6 +1,4 @@
-﻿
-
-namespace Domain.Models
+﻿namespace Domain.Models.Products
 {
     public class ProductBrand : BaseEntity<int>
     {

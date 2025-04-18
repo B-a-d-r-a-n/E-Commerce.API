@@ -16,6 +16,7 @@ namespace E_Commerce.Web
         public static IServiceCollection AddWebApplicationServices
     (this IServiceCollection services)
         {
+            services.AddControllers(); /* .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)*/
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 //Func<ActionContext,IActionResult>

@@ -1,4 +1,5 @@
 ﻿
+using Domain.Models.Products;
 using Microsoft.Extensions.Configuration;
 
 namespace Services.MappingProfiles

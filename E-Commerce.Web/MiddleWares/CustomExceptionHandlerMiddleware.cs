@@ -22,7 +22,7 @@ namespace E_Commerce.Web.MiddleWares
             {
                 await _next.Invoke(httpContext);
                 //logic
-                await HandleNotFoundEndPointAsync(httpContext);
+                await HandleNotFoundPathAsync(httpContext);
             }
             catch (Exception ex)
             {
@@ -49,22 +49,22 @@ namespace E_Commerce.Web.MiddleWares
             };
             response.StatusCode = ex switch
             {
-                NotFoundException => (int)HttpStatusCode.NotFound,
-                _ => (int)HttpStatusCode.InternalServerError,
+                NotFoundException => StatusCodes.Status404NotFound, //tare2a
+                _ => (int)HttpStatusCode.InternalServerError, //tare2a tanya
             };
             //return response as json
             httpContext.Response.StatusCode = response.StatusCode;
             await httpContext.Response.WriteAsJsonAsync(response);
         }
 
-        private static async Task HandleNotFoundEndPointAsync(HttpContext httpContext)
+        private static async Task HandleNotFoundPathAsync(HttpContext httpContext)
         {
             if (httpContext.Response.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 httpContext.Response.ContentType = "application/json";
                 var response = new ErrorDetails()
                 {
-                    ErrorMessage = $"End Point {httpContext.Request.Path} Not Found"
+                    ErrorMessage = $"Path {httpContext.Request.Path} Not Found"
                     ,
                     StatusCode = (int)HttpStatusCode.NotFound
                 };

@@ -1,15 +1,14 @@
 ﻿
-using Microsoft.AspNetCore.Mvc;
-using ServicesAbstraction;
-using Shared.DataTransferObjects;
-using Shared.DataTransferObjects.Products;
+global using Microsoft.AspNetCore.Mvc;
+global using ServicesAbstraction;
+global using Shared.DataTransferObjects;
+global using Shared.DataTransferObjects.Products;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+
     public class ProductsController(IServiceManager serviceManager)
-        : ControllerBase
+        : APIController
     {
         [HttpGet]
         public async Task<ActionResult<PaginatedResponse<ProductResponse>>> GetAllProducts(

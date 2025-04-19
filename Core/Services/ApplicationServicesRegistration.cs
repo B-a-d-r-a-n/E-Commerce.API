@@ -1,4 +1,5 @@
 ﻿
+using Domain.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Services
@@ -16,7 +17,6 @@ namespace Services
         {
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
-
             return services;
         }
     }

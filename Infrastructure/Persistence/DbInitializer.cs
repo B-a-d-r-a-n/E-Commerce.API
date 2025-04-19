@@ -1,6 +1,7 @@
 ﻿
 using System.Text.Json;
 using Domain.Contracts;
+using Domain.Models.Products;
 using Persistence.Data;
 
 namespace Persistence

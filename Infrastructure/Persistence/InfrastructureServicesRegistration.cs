@@ -3,6 +3,7 @@ using Domain.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Data;
+using Persistence.Identity;
 using Persistence.Repositories;
 using StackExchange.Redis;
 
@@ -16,6 +17,11 @@ namespace Persistence
             services.AddDbContext<StoreDbContext>(options =>
             {
                 var ConnectionString = configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlServer(ConnectionString);
+            }); 
+            services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                var ConnectionString = configuration.GetConnectionString("IdentityConnection");
                 options.UseSqlServer(ConnectionString);
             });
             services.AddScoped<IDbInitializer, DbInitializer>();

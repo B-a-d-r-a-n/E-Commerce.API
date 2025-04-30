@@ -39,6 +39,7 @@ namespace E_Commerce.Web
                                                           // Resolve from the Scope
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
             await dbInitializer.InitializeAsync();
+            await dbInitializer.InitializeIdentityAsync();
             return app;
         
         }

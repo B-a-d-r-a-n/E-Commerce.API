@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Persistence.Identity
 {
-    internal class StoreIdentityDbContext(DbContextOptions<StoreIdentityDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+    public class StoreIdentityDbContext(DbContextOptions<StoreIdentityDbContext> options) :
+        IdentityDbContext<ApplicationUser>(options)
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {

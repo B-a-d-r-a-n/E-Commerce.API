@@ -50,11 +50,19 @@ namespace E_Commerce.Web.MiddleWares
             response.StatusCode = ex switch
             {
                 NotFoundException => StatusCodes.Status404NotFound, //tare2a
+                UnauthorizedAException => StatusCodes.Status401Unauthorized, 
+                BadRequestException badRequestException=> GetValidationErrors(badRequestException,response), 
                 _ => (int)HttpStatusCode.InternalServerError, //tare2a tanya
             };
             //return response as json
             httpContext.Response.StatusCode = response.StatusCode;
             await httpContext.Response.WriteAsJsonAsync(response);
+        }
+
+        private static int GetValidationErrors(BadRequestException badRequestException, ErrorDetails response)
+        {
+            response.Errors = badRequestException.Errors;
+            return StatusCodes.Status400BadRequest;
         }
 
         private static async Task HandleNotFoundPathAsync(HttpContext httpContext)

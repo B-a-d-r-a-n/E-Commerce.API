@@ -1,6 +1,11 @@
 ﻿
 
 
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+
 namespace Services
 {
     internal class AuthenticationService(UserManager<ApplicationUser> userManager)
@@ -38,10 +43,32 @@ namespace Services
            var errors = result.Errors.Select(e=> e.Description).ToList();
             throw new BadRequestException(errors);
         }
-        private static async Task<string> CreateTokenAsync(ApplicationUser user)
+        private  async Task<string> CreateTokenAsync(ApplicationUser user)
         {
-           await  Task.Delay(TimeSpan.FromSeconds(3));
-            return "JWTToken";
+            var claims = new List<Claim>()
+            {
+                new(ClaimTypes.Email,user.Email!),
+                new(ClaimTypes.Name,user.UserName!),
+               
+            };
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+            string secretkey = "UITjyCclF5Rpu/ZctfN0YynnfLdc0gdEQrU9Js6wEJ0=";
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: "myissuer",
+                audience: "myaudience",
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(7),
+                signingCredentials: creds
+                );
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(token);
 
         }
     }

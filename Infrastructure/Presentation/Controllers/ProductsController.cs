@@ -3,6 +3,8 @@ global using Microsoft.AspNetCore.Mvc;
 global using ServicesAbstraction;
 global using Shared.DataTransferObjects;
 global using Shared.DataTransferObjects.Products;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers
 {
@@ -23,9 +25,11 @@ namespace Presentation.Controllers
             var product = await serviceManager.ProductService.GetProductAsync(id);
             return Ok(product);
         }
+        //[Authorize(Roles ="Admin")]
         [HttpGet("brands")]
         public async Task<ActionResult<BrandResponse>> GetBrands() // get baseurl/api/products/brands
         {
+            //var email = User.FindFirstValue(ClaimTypes.Email);
             var brands = await serviceManager.ProductService.GetBrandsAsync();
             return Ok(brands);
         }

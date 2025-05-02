@@ -5,6 +5,7 @@ using E_Commerce.Web.Factories;
 using E_Commerce.Web.MiddleWares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Persistence;
 using Persistence.Data;
 using Persistence.Repositories;
@@ -21,8 +22,8 @@ namespace E_Commerce.Web
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddWebApplicationServices();
-            builder.Services.AddApplicationServices();
+            builder.Services.AddWebApplicationServices(builder.Configuration);
+            builder.Services.AddApplicationServices(builder.Configuration);
             builder.Services.AddInfrastructureServices(builder.Configuration);
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -41,7 +42,7 @@ namespace E_Commerce.Web
             }
             app.UseStaticFiles();
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

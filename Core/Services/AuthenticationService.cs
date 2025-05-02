@@ -14,13 +14,13 @@ namespace Services
         : IAuthenticationService
     {
         public async Task<bool> CheckEmailAsync(string email)
-        => await userManager.FindByEmailAsync(email) != null;
+        => await userManager.FindByEmailAsync(email) is not null;
         public async Task<AddressDTO> GetUserAddressAsync(string email)
         {
             var user = await userManager.Users.Include(e => e.Address)
                 .FirstOrDefaultAsync(e => e.Email == email)
                 ?? throw new UserNotFoundException(email);
-            if (user.Address != null) return mapper.Map<AddressDTO>(user.Address);
+            if (user.Address is not null) return mapper.Map<AddressDTO>(user.Address);
             throw new AddressNotFoundException(user.UserName);
         }
 
@@ -33,15 +33,16 @@ namespace Services
 
         public async Task<AddressDTO> UpdateUserAddressAsync(AddressDTO addressDTO, string email)
         {
-            var user = await userManager.FindByEmailAsync(email)
-           ?? throw new UserNotFoundException(email);
-            if (user.Address != null) //update if found
+            var user = await userManager.Users.Include(e => e.Address)
+                 .FirstOrDefaultAsync(e => e.Email == email)
+            ?? throw new UserNotFoundException(email);
+            if (user.Address is not null) //update if found
             {
-                user.Address.Street = addressDTO.Street;
-                user.Address.City = addressDTO.City;
-                user.Address.Country = addressDTO.Country;
                 user.Address.FirstName = addressDTO.FirstName;
                 user.Address.LastName = addressDTO.LastName;
+                user.Address.City = addressDTO.City;
+                user.Address.Country = addressDTO.Country;
+                user.Address.Street = addressDTO.Street;
             }else //create if not found
             {
                 user.Address = mapper.Map<Address>(addressDTO);

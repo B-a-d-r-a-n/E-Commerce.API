@@ -1,6 +1,10 @@
-﻿using Domain.Contracts;
+﻿using System.Text;
+using Domain.Contracts;
 using E_Commerce.Web.Factories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Shared.Authentication;
 
 namespace E_Commerce.Web
 {
@@ -14,7 +18,7 @@ namespace E_Commerce.Web
             return services;
         }
         public static IServiceCollection AddWebApplicationServices
-    (this IServiceCollection services)
+    (this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers(); /* .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)*/
             services.Configure<ApiBehaviorOptions>(options =>
@@ -24,11 +28,12 @@ namespace E_Commerce.Web
                 .GenerateApiValidationResponse;
             });
             services.AddSwaggerServices();
+            ConfigureJwt(services, configuration);
             return services;
         }
 
 
-        public static async Task<WebApplication> InitializeDataBaseAsync(this WebApplication app)
+    public static async Task<WebApplication> InitializeDataBaseAsync(this WebApplication app)
         {
             
         
@@ -43,5 +48,36 @@ namespace E_Commerce.Web
             return app;
         
         }
-    }
+
+        private static void ConfigureJwt(IServiceCollection services,IConfiguration configuration)
+        {
+            var jwt = configuration.GetSection("JWTOptions").Get<JWTOptions>();
+            services.AddAuthentication(config =>
+            {
+                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(config =>
+            {
+                config.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer= jwt.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = jwt.Audience,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.SecretKey))
+                };
+            });
+
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+            //    options.AddPolicy("User", policy => policy.RequireRole("User"));
+            //});
+        }
+    };
+
+
 }

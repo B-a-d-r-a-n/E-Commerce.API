@@ -4,11 +4,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Services
 {
-    internal class AuthenticationService(UserManager<ApplicationUser> userManager)
+    internal class AuthenticationService(UserManager<ApplicationUser> userManager,IOptions<JWTOptions> options)
         : IAuthenticationService
     {
         public async Task<UserResponse> LoginAsync(LoginRequest request)
@@ -45,6 +46,7 @@ namespace Services
         }
         private  async Task<string> CreateTokenAsync(ApplicationUser user)
         {
+            var jwt = options.Value;
             var claims = new List<Claim>()
             {
                 new(ClaimTypes.Email,user.Email!),
@@ -56,15 +58,15 @@ namespace Services
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
-            string secretkey = "UITjyCclF5Rpu/ZctfN0YynnfLdc0gdEQrU9Js6wEJ0=";
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey));
+            
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.SecretKey));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
-                issuer: "myissuer",
-                audience: "myaudience",
+                issuer: jwt.Issuer,
+                audience: jwt.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(7),
+                expires: DateTime.UtcNow.AddDays(jwt.DurationInDays),
                 signingCredentials: creds
                 );
             var tokenHandler = new JwtSecurityTokenHandler();

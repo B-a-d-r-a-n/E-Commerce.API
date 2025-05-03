@@ -1,7 +1,4 @@
 ﻿
-using Domain.Exceptions;
-using Domain.Models.Basket;
-using Shared.DataTransferObjects.Basket;
 
 namespace Services
 {

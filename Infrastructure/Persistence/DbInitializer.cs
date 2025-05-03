@@ -1,12 +1,19 @@
 ﻿
 using System.Text.Json;
 using Domain.Contracts;
+using Domain.Models.Identity;
 using Domain.Models.Products;
+using Microsoft.AspNetCore.Identity;
 using Persistence.Data;
+using Persistence.Identity;
 
 namespace Persistence
 {
-    public class DbInitializer(StoreDbContext context) : IDbInitializer
+    public class DbInitializer(StoreDbContext context,
+        StoreIdentityDbContext identityDbContext,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<IdentityRole> roleManager) 
+        : IDbInitializer
     {
         // Production => Create Db , Seeding [Context]
 
@@ -67,6 +74,36 @@ namespace Persistence
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task InitializeIdentityAsync()
+        {
+            if (!roleManager.Roles.Any())
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+            }
+            if (!userManager.Users.Any())
+            {
+                var superAdminUser = new ApplicationUser
+                {
+                    DisplayName = "Super Admin",
+                    Email = "SuperAdmin@gmail.com",
+                    UserName = "SuperAdmin",
+                    PhoneNumber = "8123465789",
+                };
+                var adminUser = new ApplicationUser
+                {
+                    DisplayName= "Admin",
+                    Email = "Admin@gmail.com",
+                    UserName = "Admin",
+                    PhoneNumber = "8123465789",
+                };
+                await userManager.CreateAsync(superAdminUser, "Passw@rd");
+                await userManager.CreateAsync(adminUser, "Passw@rd");
+                await userManager.AddToRoleAsync(user: superAdminUser, role: "SuperAdmin");
+                await userManager.AddToRoleAsync(user: adminUser, role: "Admin");
             }
         }
     }

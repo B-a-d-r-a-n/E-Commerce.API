@@ -1,5 +1,5 @@
 ﻿
-using Shared.DataTransferObjects.Basket;
+global using Shared.DataTransferObjects.Basket;
 
 namespace Presentation.Controllers
 {

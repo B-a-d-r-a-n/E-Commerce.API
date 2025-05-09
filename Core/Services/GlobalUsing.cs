@@ -11,3 +11,5 @@ global using Shared.DataTransferObjects.Basket;
 global using Domain.Models.Products;
 global using Services.Specifications;
 global using Shared.DataTransferObjects;
+global using Domain.Models.OrderModels;
+global using System.Linq.Expressions;

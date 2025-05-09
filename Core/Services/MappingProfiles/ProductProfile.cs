@@ -33,6 +33,7 @@ namespace Services.MappingProfiles
     {
         public string Resolve(Product source, ProductResponse destination, string destMember, ResolutionContext context)
         {
+            //return string.IsNullOrWhiteSpace(source.PictureUrl) ? string.Empty : $"{configuration["BaseUrl"]}{source.PictureUrl}";
             if (!string.IsNullOrEmpty(source.PictureUrl))
             {
                 return $"{configuration["BaseUrl"]}{source.PictureUrl}";

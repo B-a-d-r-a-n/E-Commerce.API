@@ -1,8 +1,7 @@
 ﻿
 global using Domain.Contracts;
 global using Domain.Models.Basket;
-using System.Text.Json;
-using StackExchange.Redis;
+
 
 namespace Persistence.Repositories
 {

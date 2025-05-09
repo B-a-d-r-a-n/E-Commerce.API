@@ -1,11 +1,6 @@
 ﻿
-using System.Text.Json;
-using Domain.Contracts;
 using Domain.Models.Identity;
-using Domain.Models.Products;
 using Microsoft.AspNetCore.Identity;
-using Persistence.Data;
-using Persistence.Identity;
 
 namespace Persistence
 {
@@ -29,7 +24,25 @@ namespace Persistence
         {
             try
             {
-                if (!context.ProductBrands.Any())
+                /// production => Create Db + Seeding
+                /// Dev => Seeding
+                /// if (!await context.Database.GetPendingMigrationsAsync().Any())
+                /// await context.Database.MigrateAsync();
+                if (!context.Set<DeliveryMethod>().Any())
+                {
+                    // Read from the file
+                    var DeliveryData = await File.ReadAllTextAsync(path: @"..\Infrastructure\Persistence\Data\Seeding\delivery.json");
+
+                    // Deserialize => Convert from String to C# Object
+                    var delivery = JsonSerializer.Deserialize<List<DeliveryMethod>>(json: DeliveryData);
+
+                    if (delivery != null && delivery.Any())
+                    {
+                        context.Set<DeliveryMethod>().AddRange(entities: delivery);
+                    }
+                }
+                    await context.SaveChangesAsync();
+                    if (!context.Set<ProductBrand>().Any())
                 {
                     // Read from the file
                     var BrandsData = await File.ReadAllTextAsync(path: @"..\Infrastructure\Persistence\Data\Seeding\brands.json");
@@ -39,12 +52,12 @@ namespace Persistence
 
                     if (brands != null && brands.Any())
                     {
-                        context.ProductBrands.AddRange(entities: brands);
+                        context.Set<ProductBrand>().AddRange(entities: brands);
                     }
 
                     await context.SaveChangesAsync();
                 }
-                if (!context.ProductTypes.Any())
+                if (!context.Set<ProductType>().Any())
                 {
                     // Read from the file
                     var typesData = await File.ReadAllTextAsync(@"..\Infrastructure\Persistence\Data\Seeding\types.json");
@@ -53,11 +66,11 @@ namespace Persistence
 
                     if (types != null && types.Any())
                     {
-                        context.ProductTypes.AddRange(types);
+                        context.Set<ProductType>().AddRange(types);
                     }
                     await context.SaveChangesAsync();
                 }
-                if (!context.Products.Any())
+                if (!context.Set<Product>().Any())
                 {
                     // Read from the file
                     var productsData = await File.ReadAllTextAsync(path: @"..\Infrastructure\Persistence\Data\Seeding\products.json");
@@ -66,7 +79,7 @@ namespace Persistence
 
                     if (products != null && products.Any())
                     {
-                        context.Products.AddRange(entities: products);
+                        context.Set<Product>().AddRange(entities: products);
                     }
                     await context.SaveChangesAsync();
                 }

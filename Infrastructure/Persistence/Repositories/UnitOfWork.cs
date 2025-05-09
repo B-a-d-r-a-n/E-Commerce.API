@@ -1,7 +1,4 @@
 ﻿
-using Domain.Contracts;
-using Persistence.Data;
-
 namespace Persistence.Repositories
 {
     public class UnitOfWork(StoreDbContext context) : IUnitOfWork
@@ -16,6 +13,17 @@ namespace Persistence.Repositories
                     (IGenericRepository<TEntity, TKey>) _repositories[typeName];
 
             var repo = new GenericRepository<TEntity, TKey>(context);
+            _repositories.Add(typeName, repo);
+            return repo;
+        }
+
+        public IGenericRepository<TEntity, int> GetRepository<TEntity>() where TEntity : BaseEntity<int>
+        {
+            var typeName = typeof(TEntity).Name;
+            if (_repositories.ContainsKey(typeName)) return
+                    (IGenericRepository<TEntity, int>)_repositories[typeName];
+
+            var repo = new GenericRepository<TEntity, int>(context);
             _repositories.Add(typeName, repo);
             return repo;
         }

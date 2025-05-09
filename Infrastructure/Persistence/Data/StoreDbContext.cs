@@ -1,5 +1,4 @@
 ﻿
-using Domain.Models.Products;
 
 namespace Persistence.Data
 {

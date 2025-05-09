@@ -1,6 +1,4 @@
 ﻿
-using Domain.Contracts;
-
 namespace Persistence.Repositories
 {
     internal static class SpecificationsEvaluator

@@ -8,7 +8,7 @@ namespace Domain.Models.OrderModels
             
         }
         public Order(string userEmail,
-            IEnumerable<OrderItem> items,
+            ICollection<OrderItem> items,
             OrderAddress address,
             DeliveryMethod deliveryMethod,
             decimal subtotal)
@@ -25,7 +25,7 @@ namespace Domain.Models.OrderModels
         // Id guid
         public string UserEmail { get; set; } = default!;
         public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
-        public IEnumerable<OrderItem> Items { get; set; } = [];
+        public ICollection<OrderItem> Items { get; set; } = [];
         public OrderAddress Address { get; set; } = default!;
         public DeliveryMethod DeliveryMethod { get; set; } = default!;
         public int DeliveryMethodId { get; set; }

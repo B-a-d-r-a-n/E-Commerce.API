@@ -44,19 +44,24 @@ namespace Services
             => new(new(product.Id,product.Name,product.PictureUrl),
                 product.Price,basketItem.Quantity);
 
-        public Task<IEnumerable<OrderResponse>> GetAllAsync(string email)
+        public async Task<IEnumerable<OrderResponse>> GetAllAsync(string email)
         {
-            throw new NotImplementedException();
+            var orders = await _unitOfWork.GetRepository<Order, Guid>()
+                .GetAllAsync(new OrderSpecifications(email));
+            return mapper.Map<IEnumerable<OrderResponse>>(orders);
         }
 
-        public Task<OrderResponse> GetAsync(Guid id)
+        public async Task<OrderResponse> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var order = await _unitOfWork.GetRepository<Order, Guid>()
+    .GetAsync(new OrderSpecifications(id));
+            return mapper.Map<OrderResponse>(order);
         }
 
-        public Task<IEnumerable<DeliveryMethodResponse>> GetDeliveryMethodsAsync()
+        public async Task<IEnumerable<DeliveryMethodResponse>> GetDeliveryMethodsAsync()
         {
-            throw new NotImplementedException();
+            var deliveryMethods = await _unitOfWork.GetRepository<DeliveryMethod>().GetAllAsync();
+            return mapper.Map<IEnumerable<DeliveryMethodResponse>>(deliveryMethods);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Shared.Authentication;
 
 namespace Presentation.Controllers

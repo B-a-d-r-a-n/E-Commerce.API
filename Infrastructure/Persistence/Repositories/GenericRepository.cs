@@ -1,6 +1,5 @@
 ﻿
 using Domain.Contracts;
-using Persistence.Data;
 
 namespace Persistence.Repositories
 {

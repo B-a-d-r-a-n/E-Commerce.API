@@ -25,8 +25,8 @@ namespace Services
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICashService, CashService>();
             //services.AddScoped<IPaymentService, PaymentService>();
-            //services.AddScoped<ICashService, CashService>();
 
 
             // Factory Delegate Registration

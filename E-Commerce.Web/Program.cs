@@ -51,7 +51,7 @@ namespace E_Commerce.Web
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
-                    options.DocumentTitle = "My E-Commerce API";
+                    options.DocumentTitle = "E-Commerce API";
                     options.DocExpansion(DocExpansion.None);
 
                     //options.InjectStylesheet();

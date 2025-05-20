@@ -3,8 +3,7 @@ global using Microsoft.AspNetCore.Mvc;
 global using ServicesAbstraction;
 global using Shared.DataTransferObjects;
 global using Shared.DataTransferObjects.Products;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+
 
 namespace Presentation.Controllers
 {

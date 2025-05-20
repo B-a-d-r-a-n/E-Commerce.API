@@ -6,7 +6,6 @@ using Shared.DataTransferObjects.ErrorModels;
 namespace E_Commerce.Web.MiddleWares
 {
     public class CustomExceptionHandlerMiddleware
-
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<CustomExceptionHandlerMiddleware> _logger;
@@ -22,7 +21,13 @@ namespace E_Commerce.Web.MiddleWares
             {
                 await _next.Invoke(httpContext);
                 //logic
+
+                if (httpContext.Response.StatusCode == (int)HttpStatusCode.NotFound)
+                {
+
                 await HandleNotFoundPathAsync(httpContext);
+                }
+
             }
             catch (Exception ex)
             {
@@ -47,6 +52,7 @@ namespace E_Commerce.Web.MiddleWares
             ,
                 ErrorMessage = ex.Message
             };
+
             response.StatusCode = ex switch
             {
                 NotFoundException => StatusCodes.Status404NotFound, //tare2a
@@ -67,8 +73,7 @@ namespace E_Commerce.Web.MiddleWares
 
         private static async Task HandleNotFoundPathAsync(HttpContext httpContext)
         {
-            if (httpContext.Response.StatusCode == (int)HttpStatusCode.NotFound)
-            {
+
                 httpContext.Response.ContentType = "application/json";
                 var response = new ErrorDetails()
                 {
@@ -78,7 +83,6 @@ namespace E_Commerce.Web.MiddleWares
                 };
                 await httpContext.Response.WriteAsJsonAsync(response);
 
-            }
         }
     }
     public static class CustomExceptionHandlerMiddlewareExtensions

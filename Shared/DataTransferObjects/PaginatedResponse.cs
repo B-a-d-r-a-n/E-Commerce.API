@@ -1,5 +1,4 @@
 ﻿
-using Shared.DataTransferObjects.Products;
 
 namespace Shared.DataTransferObjects
 {

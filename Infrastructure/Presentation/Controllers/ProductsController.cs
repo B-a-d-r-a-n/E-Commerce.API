@@ -3,6 +3,7 @@ global using Microsoft.AspNetCore.Mvc;
 global using ServicesAbstraction;
 global using Shared.DataTransferObjects;
 global using Shared.DataTransferObjects.Products;
+using Presentation.Attributes;
 
 
 namespace Presentation.Controllers
@@ -11,6 +12,7 @@ namespace Presentation.Controllers
     public class ProductsController(IServiceManager serviceManager)
         : APIController
     {
+        [RedisCash]
         [HttpGet]
         public async Task<ActionResult<PaginatedResponse<ProductResponse>>> GetAllProducts(
             [FromQuery]ProductQueryParameters queryParameters) // get baseurl/api/products

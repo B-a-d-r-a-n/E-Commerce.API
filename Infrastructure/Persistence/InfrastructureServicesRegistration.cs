@@ -29,6 +29,7 @@ namespace Persistence
               return  ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnection")!);
             });
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<ICashRepository, CashRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             ConfigureIdentity(services, configuration);
             return services;

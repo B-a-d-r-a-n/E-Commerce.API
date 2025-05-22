@@ -23,7 +23,7 @@ namespace Services.Specifications
         {
             AddInclude(p => p.ProductBrand);
             AddInclude(p => p.ProductType);
-            ApplySorting(parameters.Options);
+            ApplySorting(parameters.Sort);
             ApplyPagination(parameters.PageSize,parameters.PageIndex);
         }
 

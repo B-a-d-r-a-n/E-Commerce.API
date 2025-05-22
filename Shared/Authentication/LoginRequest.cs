@@ -1,6 +1,8 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace Shared.Authentication
 {
-    public record LoginRequest(string Email, string Password);
+    public record LoginRequest([EmailAddress]string Email, string Password);
    
 }

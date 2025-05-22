@@ -20,8 +20,11 @@ namespace Services
             var user = await userManager.Users.Include(e => e.Address)
                 .FirstOrDefaultAsync(e => e.Email == email)
                 ?? throw new UserNotFoundException(email);
-            if (user.Address is not null) return mapper.Map<AddressDTO>(user.Address);
-            throw new AddressNotFoundException(user.UserName);
+
+            //if (user.Address is null) throw new AddressNotFoundException(user.UserName);
+
+            return mapper.Map<AddressDTO>(user.Address);
+            
         }
 
         public async Task<UserResponse> GetUserByEmail(string email)

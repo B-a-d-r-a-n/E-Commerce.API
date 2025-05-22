@@ -9,13 +9,16 @@ namespace Services
 
         public async Task<BasketDTO> GetAsync(string id)
         {
+            // Get Basket 
+            // Mapping <Domain , DTO>
+            // => Basket DTO 
             var basket = await basketRepository.GetAsync(id)?? throw new BasketNotFoundException(id);
             return mapper.Map<BasketDTO>(basket);
         }
 
-        public async Task<BasketDTO> UpdateAsync(BasketDTO basket)
+        public async Task<BasketDTO> UpdateAsync(BasketDTO basketDTO)
         {
-            var customerBasket=mapper.Map<CustomerBasket>(basket);
+            var customerBasket=mapper.Map<CustomerBasket>(basketDTO);
             var updatedBasket = await basketRepository.UpdateAsync(customerBasket)
                 ?? throw new Exception("Can't update basket now!");
             return mapper.Map<BasketDTO>(updatedBasket);

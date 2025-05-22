@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Shared.Authentication;
@@ -15,8 +16,8 @@ namespace Presentation.Controllers
         public async Task<ActionResult<UserResponse>> Register(RegisterRequest request)
             => Ok( await serviceManager.AuthenticationService.RegisterAsync(request));
 
-        [HttpGet("CheckEmail")]
-        public async Task<ActionResult<bool>> CheckEmail(string email)
+        [HttpGet("emailexists")]
+        public async Task<ActionResult<bool>> CheckEmail([EmailAddress]string email)
         {
             var result = await serviceManager.AuthenticationService.CheckEmailAsync(email);
             return Ok(result);

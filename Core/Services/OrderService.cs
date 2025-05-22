@@ -12,11 +12,11 @@ namespace Services
         {
             var basket = await _basketRepository.GetAsync(request.BasketId)??
                 throw new BasketNotFoundException(request.BasketId);
-            var address = mapper.Map<OrderAddress>(request.Address);
+            var address = mapper.Map<OrderAddress>(request.ShipToAddress);
 
             List<OrderItem> items = [];
             var productRepo = _unitOfWork.GetRepository<Product>();
-            foreach (var item in basket.BasketItems)
+            foreach (var item in basket.Items)
             {
                 var product = await productRepo.GetAsync(item.Id)??
                     throw new ProductNotFoundException(item.Id);

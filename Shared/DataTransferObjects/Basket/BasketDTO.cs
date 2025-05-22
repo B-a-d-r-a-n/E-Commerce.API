@@ -3,7 +3,13 @@
     public record BasketDTO
     {
         public string Id { get; init; }
-        public ICollection<BasketItemDTO> BasketItems { get; init; } = [];
+
+        public IEnumerable<BasketItemDTO> Items { get; set; }
+
+        public string? PaymentIntentId { get; set; }
+        public string? ClientSecret { get; set; }
+        public int? DeliveryMethodId { get; set; }
+        public decimal ShippingPrice { get; set; }
     }
 
     }

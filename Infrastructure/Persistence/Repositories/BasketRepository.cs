@@ -15,13 +15,15 @@ namespace Persistence.Repositories
             // Deserlization from json
             // return
             var basket = await _database.StringGetAsync(id);
+
             if (basket.IsNullOrEmpty)
             {
                 return null;
             }
+            // deserialize to object
             return JsonSerializer.Deserialize<CustomerBasket>(basket!);
         }
-        public async Task<CustomerBasket?> UpdateAsync(CustomerBasket? basket, TimeSpan? timeToLive = null)
+        public async Task<CustomerBasket?> UpdateAsync(CustomerBasket basket, TimeSpan? timeToLive = null)
         {
             // serialize to json to store in redis
             var jsonBasket = JsonSerializer.Serialize(basket);

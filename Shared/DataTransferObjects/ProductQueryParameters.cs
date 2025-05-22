@@ -11,7 +11,7 @@ namespace Shared.DataTransferObjects
         private int _pageSize = DefaultPageSize;
         public int? BrandId { get; set; }
         public int? TypeId { get; set; }
-        public ProductSortingOptions Options { get; set; } 
+        public ProductSortingOptions Sort { get; set; } 
         public string? Search { get; set; }
         public int PageIndex { get; set; } = 1;
         public int PageSize 

@@ -9,8 +9,8 @@ public class Order : BaseEntity<Guid>
         ICollection<OrderItem> items,
         OrderAddress address,
         DeliveryMethod deliveryMethod,
-         decimal subtotal
-         //string paymentIntentId
+         decimal subtotal,
+         string paymentIntentId
         )
     {
         BuyerEmail = userEmail;
@@ -18,7 +18,7 @@ public class Order : BaseEntity<Guid>
         ShipToAddress = address;
         DeliveryMethod = deliveryMethod;
         Subtotal = subtotal;
-        //PaymentIntentId = paymentIntentId;
+        PaymentIntentId = paymentIntentId;
     }
 
     // Id

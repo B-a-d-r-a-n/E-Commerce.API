@@ -4,7 +4,7 @@ namespace Domain.Exceptions
     public abstract class NotFoundException(string message):
         Exception(message);
 
-    public class AddressNotFoundException(string userName)
+    public sealed class AddressNotFoundException(string userName)
     : NotFoundException($"The user {userName} has no address");
     public sealed class ProductNotFoundException(int id)
     : NotFoundException($"Product with Id {id} not found");

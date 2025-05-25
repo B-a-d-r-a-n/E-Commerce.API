@@ -2,8 +2,8 @@
 internal class ServiceManagerWithFactoryDelegate(Func<IProductService> productFactory,
     Func<IAuthenticationService> authFactory,
     Func<IOrderService> orderFactory,
-    Func<IBasketService> basketFactory)
-    //Func<IPaymentService> paymentFactory)
+    Func<IBasketService> basketFactory,
+    Func<IPaymentService> paymentFactory)
     : IServiceManager
 {
     public IProductService ProductService => productFactory.Invoke();
@@ -14,5 +14,7 @@ internal class ServiceManagerWithFactoryDelegate(Func<IProductService> productFa
 
     public IOrderService OrderService => orderFactory.Invoke();
 
-    //public IPaymentService PaymentService => paymentFactory.Invoke();
+    public IPaymentService PaymentService => paymentFactory.Invoke();
+
+
 }

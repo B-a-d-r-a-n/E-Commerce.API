@@ -10,8 +10,9 @@ namespace Persistence.Data.Configurations
             builder.Property(d=> d.Subtotal)
                 .HasColumnType("decimal(8,2)");
             builder.HasMany(o => o.Items)
-                .WithOne();
-            builder.OwnsOne(o => o.Address, builder => builder.WithOwner());
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.OwnsOne(o => o.ShipToAddress, builder => builder.WithOwner());
         }
     }
 }

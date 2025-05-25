@@ -9,19 +9,25 @@ namespace Services.MappingProfiles
     {
         public OrderProfile()
         {
-            CreateMap<OrderAddress,AddressDTO>().ReverseMap();
-            CreateMap<OrderItem, OrderItemDTO>()
-                .ForMember(d => d.ProductName, option =>
-                    option.MapFrom(s => s.Product.ProductName))
-                .ForMember(d => d.PictureUrl, option =>
-                option.MapFrom<OrderItemPictureUrlResolver>());
-            CreateMap<Order, OrderResponse>()
-                .ForMember(d => d.DeliveryMethod, options =>
-                options.MapFrom(s => s.DeliveryMethod.ShortName))
-                .ForMember(d => d.Total, options =>
-                options.MapFrom(s => s.DeliveryMethod.Price + s.Subtotal));
-            CreateMap<DeliveryMethod, DeliveryMethodResponse>();
+            CreateMap<OrderAddress, AddressDTO>().ReverseMap();
 
+            CreateMap<OrderItem, OrderItemDTO>()
+                .ForMember(d => d.ProductName,
+                o => o.MapFrom(s => s.Product.ProductName))
+                .ForMember(d => d.ProductId,
+                o => o.MapFrom(s => s.Product.ProductId))
+                .ForMember(d => d.PictureUrl,
+                o => o.MapFrom<OrderItemPictureUrlResolver>());
+
+            CreateMap<Order, OrderResponse>()
+                .ForMember(d => d.DeliveryMethod,
+                o => o.MapFrom(s => s.DeliveryMethod.ShortName))
+                .ForMember(d => d.DeliveryCost,
+                o => o.MapFrom(s => s.DeliveryMethod.Cost))
+                .ForMember(d => d.Total,
+                o => o.MapFrom(s => s.DeliveryMethod.Cost + s.Subtotal));
+
+            CreateMap<DeliveryMethod, DeliveryMethodResponse>();
 
         }
     }

@@ -12,6 +12,7 @@ using Persistence.Repositories;
 using Services;
 using ServicesAbstraction;
 using Shared.DataTransferObjects.ErrorModels;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace E_Commerce.Web
 {
@@ -20,6 +21,16 @@ namespace E_Commerce.Web
         public  static  async Task  Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
 
             // Add services to the container.
             builder.Services.AddWebApplicationServices(builder.Configuration);
@@ -38,10 +49,20 @@ namespace E_Commerce.Web
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                app.UseSwaggerUI(options =>
+                {
+                    options.DocumentTitle = "E-Commerce API";
+                    options.DocExpansion(DocExpansion.None);
+
+                    //options.InjectStylesheet();
+
+                    options.EnableFilter();
+                    options.DisplayRequestDuration();
+                });
+                }
             app.UseStaticFiles();
             app.UseHttpsRedirection();
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 

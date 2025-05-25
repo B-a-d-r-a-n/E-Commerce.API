@@ -5,7 +5,8 @@ namespace Services
     internal class BasketService(IBasketRepository basketRepository,IMapper mapper)
         : IBasketService
     {
-        public async Task<bool> DeleteAsync(string id) => await basketRepository.DeleteAsync(id);
+        public async Task<bool> DeleteAsync(string id) => 
+            await basketRepository.DeleteAsync(id)? true:throw new BasketNotFoundException(id);
 
         public async Task<BasketDTO> GetAsync(string id)
         {

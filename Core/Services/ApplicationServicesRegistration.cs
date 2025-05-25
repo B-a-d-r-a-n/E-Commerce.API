@@ -26,7 +26,7 @@ namespace Services
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICashService, CashService>();
-            //services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
 
             // Factory Delegate Registration
@@ -38,8 +38,8 @@ namespace Services
              => provider.GetRequiredService<IBasketService>());
             services.AddScoped<Func<IOrderService>>(provider => ()
              => provider.GetRequiredService<IOrderService>());
-            //services.AddScoped<Func<IPaymentService>>(provider => ()
-            // => provider.GetRequiredService<IPaymentService>());
+            services.AddScoped<Func<IPaymentService>>(provider => ()
+             => provider.GetRequiredService<IPaymentService>());
 
 
             services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);

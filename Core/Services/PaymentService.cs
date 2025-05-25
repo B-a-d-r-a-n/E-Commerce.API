@@ -13,8 +13,8 @@ namespace Services
     {
         public async Task<BasketDTO> CreateOrUpdatePaymentIntent(string basketId)
         {
-            //StripeConfiguration.ApiKey = configuration["Stripe:SecretKey"];
-            StripeConfiguration.ApiKey = configuration.GetRequiredSection("Stripe")["SecretKey"];  
+            StripeConfiguration.ApiKey = configuration["Stripe:SecretKey"];
+            //StripeConfiguration.ApiKey = configuration.GetRequiredSection("Stripe")["SecretKey"];  
             //basketrepo => get basket 
             var basket = await basketRepository.GetAsync(basketId) ??
                 throw new BasketNotFoundException(basketId);
@@ -71,6 +71,53 @@ namespace Services
             }
             await basketRepository.UpdateAsync(basket);
             return mapper.Map<BasketDTO>(basket);
+        }
+
+        public async Task UpdateOrderPaymentStatusAsync(string jsonRequest, string stripeHeader)
+        {
+            var endpointSecret = configuration.GetRequiredSection("Stripe")["EndPointSecret"];
+            var stripeEvent = EventUtility.ConstructEvent(jsonRequest,
+                      stripeHeader, endpointSecret);
+
+            var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+            switch (stripeEvent.Type)
+            {
+                case EventTypes.PaymentIntentPaymentFailed:
+                    await UpdatePaymentFailedAsync(paymentIntent.Id);
+                    break;
+                case EventTypes.PaymentIntentSucceeded:
+                    await UpdatePaymentReceivedAsync(paymentIntent.Id);
+                    break;
+                // ... handle other event types
+                default:
+                    Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
+                    break;
+            }
+
+
+        }
+
+        private async Task UpdatePaymentReceivedAsync(string paymentIntentId)
+        {
+            var order = await unitOfWork.GetRepository<Order, Guid>()
+                .GetAsync(new OrderWithPaymentIntentSpecification(paymentIntentId));
+
+            order.Status = PaymentStatus.PaymentReceived;
+
+            unitOfWork.GetRepository<Order, Guid>().Update(order);
+
+            await unitOfWork.SaveChangesAsync();
+        }
+        private async Task UpdatePaymentFailedAsync(string paymentIntentId)
+        {
+            var order = await unitOfWork.GetRepository<Order, Guid>()
+                .GetAsync(new OrderWithPaymentIntentSpecification(paymentIntentId));
+
+            order.Status = PaymentStatus.PaymentFailed;
+
+            unitOfWork.GetRepository<Order, Guid>().Update(order);
+
+            await unitOfWork.SaveChangesAsync();
         }
     }
 }

@@ -25,5 +25,7 @@ namespace Services
         public IBasketService BasketService => _lazyBasketService.Value;
         public IAuthenticationService AuthenticationService => _lazyAuthenticationService.Value;
         public IOrderService OrderService => _lazyOrderService.Value;
+
+        public IPaymentService PaymentService => throw new NotImplementedException();
     }
 }

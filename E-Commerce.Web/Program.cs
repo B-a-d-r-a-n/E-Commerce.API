@@ -32,6 +32,8 @@ namespace E_Commerce.Web
                 });
             });
 
+            //builder.Logging.AddEventLog();
+
             // Add services to the container.
             builder.Services.AddWebApplicationServices(builder.Configuration);
             builder.Services.AddApplicationServices(builder.Configuration);
@@ -46,8 +48,7 @@ namespace E_Commerce.Web
             await app.InitializeDataBaseAsync(); //await InitializeDbAsync(app);
             app.UseCustomExceptionMiddleware();      //app.UseMiddleware<CustomExceptionHandlerMiddleware>();
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
@@ -59,7 +60,7 @@ namespace E_Commerce.Web
                     options.EnableFilter();
                     options.DisplayRequestDuration();
                 });
-                }
+                
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");

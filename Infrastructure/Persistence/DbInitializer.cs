@@ -26,12 +26,12 @@ namespace Persistence
             {
                 /// production => Create Db + Seeding
                 /// Dev => Seeding
-                /// if (!await context.Database.GetPendingMigrationsAsync().Any())
-                /// await context.Database.MigrateAsync();
+                 if ((await context.Database.GetPendingMigrationsAsync()).Any())
+                 await context.Database.MigrateAsync();
                 if (!context.Set<DeliveryMethod>().Any())
                 {
                     // Read from the file
-                    var DeliveryData = await File.ReadAllTextAsync(path: @"..\Infrastructure\Persistence\Data\Seeding\delivery.json");
+                    var DeliveryData = await File.ReadAllTextAsync(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","Seeding","delivery.json"));
 
                     // Deserialize => Convert from String to C# Object
                     var delivery = JsonSerializer.Deserialize<List<DeliveryMethod>>(json: DeliveryData);
@@ -45,7 +45,7 @@ namespace Persistence
                     if (!context.Set<ProductBrand>().Any())
                 {
                     // Read from the file
-                    var BrandsData = await File.ReadAllTextAsync(path: @"..\Infrastructure\Persistence\Data\Seeding\brands.json");
+                    var BrandsData = await File.ReadAllTextAsync(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Seeding", "brands.json"));
 
                     // Deserialize => Convert from String to C# Object
                     var brands = JsonSerializer.Deserialize<List<ProductBrand>>(json: BrandsData);
@@ -60,7 +60,7 @@ namespace Persistence
                 if (!context.Set<ProductType>().Any())
                 {
                     // Read from the file
-                    var typesData = await File.ReadAllTextAsync(@"..\Infrastructure\Persistence\Data\Seeding\types.json");
+                    var typesData = await File.ReadAllTextAsync(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Seeding", "types.json"));
                     // Deserialize => Convert from String to C# Object
                     var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
 
@@ -73,7 +73,7 @@ namespace Persistence
                 if (!context.Set<Product>().Any())
                 {
                     // Read from the file
-                    var productsData = await File.ReadAllTextAsync(path: @"..\Infrastructure\Persistence\Data\Seeding\products.json");
+                    var productsData = await File.ReadAllTextAsync(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Seeding", "products.json"));
                     // Deserialize => Convert from String to C# Object
                     var products = JsonSerializer.Deserialize<List<Product>>(json: productsData);
 

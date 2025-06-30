@@ -1,0 +1,15 @@
+﻿global using Domain.Models.Identity;
+global using Microsoft.AspNetCore.Identity;
+global using Shared.Authentication;
+global using AutoMapper;
+global using Domain.Contracts;
+global using ServicesAbstraction;
+global using Shared.DataTransferObjects.Products;
+global using Domain.Exceptions;
+global using Domain.Models.Basket;
+global using Shared.DataTransferObjects.Basket;
+global using Domain.Models.Products;
+global using Services.Specifications;
+global using Shared.DataTransferObjects;
+global using Domain.Models.OrderModels;
+global using System.Linq.Expressions;
